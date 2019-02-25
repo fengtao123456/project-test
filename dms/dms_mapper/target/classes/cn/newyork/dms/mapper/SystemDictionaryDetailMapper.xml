@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.SystemDictionaryDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.SystemDictionaryDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+    <result column="serial" property="serial" jdbcType="BIGINT" />
+    <!--<result column="types_id" property="types" jdbcType="BIGINT" />-->
+    <association property="types"
+            javaType="cn.newyork.common.domain.SystemDictionaryType"
+            column="types_id"
+            select="findParent">
+    </association>
+  </resultMap>
+  <select id="findParent" resultType="cn.newyork.common.domain.SystemDictionaryType"  >
+    select id, sn, name, status
+    from t_systemdictionarytype
+    where id = #{types_id}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_systemdictionarydetail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="cn.newyork.common.domain.SystemDictionaryDetail" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_systemdictionarydetail (id, name, types_id, 
+      status, serial)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{types.id,jdbcType=BIGINT},
+      #{status,jdbcType=BIGINT}, #{serial,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.SystemDictionaryDetail" >
+    update t_systemdictionarydetail
+    set name = #{name,jdbcType=VARCHAR},
+      types_id = #{types.id,jdbcType=BIGINT},
+      status = #{status,jdbcType=BIGINT},
+      serial = #{serial,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, name, types_id, status, serial
+    from t_systemdictionarydetail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, types_id, status, serial
+    from t_systemdictionarydetail
+  </select>
+  <select id="queryPage" resultMap="BaseResultMap" >
+    select id, name, types_id, status, serial
+    from t_systemdictionarydetail
+  </select>
+  <!--高级查询：模糊查询【字典标识与字典类型】-->
+  <!-- List<SystemDictionaryDetail> likeQuery(SystemDictionaryDetailQuery query);-->
+
+  <select id="likeQuery" parameterType="cn.newyork.common.query.SystemDictionaryDetailQuery" resultType="cn.newyork.common.domain.SystemDictionaryDetail">
+    select * from t_systemdictionarydetail sd
+    <where>
+      <if test="sn !=null and sn!=''">
+        and sd.sn like CONCAT('%',#{sn},'%')
+      </if>
+      <if test="type !=null and type!=''">
+        and sd.type like concat('%',#{type},'%')
+      </if>
+    </where>
+  </select>
+</mapper>

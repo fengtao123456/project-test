@@ -1,0 +1,11 @@
+cn\newyork\cxf\phone\package-info.class
+cn\newyork\cxf\phone\GetMobileCodeInfoResponse.class
+cn\newyork\cxf\phone\MobileCodeWS.class
+cn\newyork\cxf\phone\MobileCodeWSHttpGet.class
+cn\newyork\cxf\phone\ArrayOfString.class
+cn\newyork\cxf\phone\MobileCodeWSSoap.class
+cn\newyork\cxf\phone\GetDatabaseInfo.class
+cn\newyork\cxf\phone\MobileCodeWSHttpPost.class
+cn\newyork\cxf\phone\GetDatabaseInfoResponse.class
+cn\newyork\cxf\phone\GetMobileCodeInfo.class
+cn\newyork\cxf\phone\ObjectFactory.class

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.SysresourceMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.Sysresource" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="descs" property="descs" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_sysresource
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.Sysresource" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_sysresource (id, name, url,
+      descs, status)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+      #{descs,jdbcType=VARCHAR}, #{status,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.Sysresource" >
+    update t_sysresource
+    set name = #{name,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      descs = #{descs,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, name, url, descs, status
+    from t_sysresource
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, url, descs, status
+    from t_sysresource
+  </select>
+<!--分页查询-->
+  <select id="queryPage" resultMap="BaseResultMap" >
+    select id, name, url, descs, status
+    from t_sysresource
+  </select>
+  <!--高级查询：模糊查询【资源名称与资源路径】-->
+  <!--List<Sysresource> likeQuery(SysresourceQuery query);-->
+  <select id="likeQuery" parameterType="cn.newyork.common.query.SysresourceQuery" resultType="cn.newyork.common.domain.Sysresource">
+    select * from t_sysresource sr
+    <where>
+      <if test="name !=null and name!=''">
+        and sr.name like CONCAT('%',#{name},'%')
+      </if>
+      <if test="url !=null and url!=''">
+        and sr.url like concat('%',#{url},'%')
+      </if>
+    </where>
+  </select>
+</mapper>

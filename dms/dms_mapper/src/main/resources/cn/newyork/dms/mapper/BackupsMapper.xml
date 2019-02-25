@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.BackupsMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.Backups" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+    <result column="filesize" property="filesize" jdbcType="BIGINT" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <association property="employee"
+                 column="employee_id"
+                 javaType="cn.newyork.common.domain.Employee"
+                 select="findEmployeeById">
+    </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_backups
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.Backups" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_backups (id, filename, url, 
+      employee_id, date, filesize, 
+      sn)
+    values (#{id,jdbcType=BIGINT}, #{filename,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{employee.id,jdbcType=BIGINT}, #{date,jdbcType=TIMESTAMP}, #{filesize,jdbcType=BIGINT},
+      #{sn,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.Backups" >
+    update t_backups
+    set filename = #{filename,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      employee_id = #{employee.id,jdbcType=BIGINT},
+      date = #{date,jdbcType=TIMESTAMP},
+      filesize = #{filesize,jdbcType=BIGINT},
+      sn = #{sn,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, filename, url, employee_id, date, filesize, sn
+    from t_backups
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, filename, url, employee_id, date, filesize, sn
+    from t_backups
+  </select>
+
+  <select id="queryPage" resultMap="BaseResultMap">
+    select id, filename, url, employee_id, date, filesize, sn from t_backups b
+    <where>
+      <if test="filename !=null and filename !=''">
+        and b.filename like concat('%',#{filename},'%')
+      </if>
+      <if test="beginTime !=null and beginTime !=''">
+        and b.date &gt;= #{beginTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and b.date &lt;= #{endTime}
+      </if>
+      <if test="employee !=null and employee !=''">
+        and b.employee_id = #{employee}
+      </if>
+    </where>
+  </select>
+
+  <select id="findEmployeeById" parameterType="long" resultType="cn.newyork.common.domain.Employee">
+    select * from t_employee where id =#{id};
+  </select>
+</mapper>

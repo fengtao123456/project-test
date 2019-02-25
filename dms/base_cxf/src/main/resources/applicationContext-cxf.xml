@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <!--
+    http://localhost:8088/service/HelloWorld?wsdl
+          id="helloClient"  beanid
+          serviceClass="demo.spring.HelloWorld"  服务的接口
+          address="http://localhost:8088/service/HelloWorld"  服务的远程地址
+    -->
+    <jaxws:client id="phone"
+                  serviceClass="cn.newyork.cxf.phone.MobileCodeWSSoap"
+                  address="http://ws.webxml.com.cn/WebServices/MobileCodeWS.asmx"/>
+</beans>

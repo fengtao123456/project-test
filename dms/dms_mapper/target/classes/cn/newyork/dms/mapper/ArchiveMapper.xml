@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.ArchiveMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.Archive" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="doctypemanage_id" property="doctypemanageId" jdbcType="BIGINT" />
+    <result column="docpositions_id" property="docpositionsId" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="employee_id" property="employeeId" jdbcType="BIGINT" />
+    <result column="inputTime" property="inputtime" jdbcType="TIMESTAMP" />
+    <result column="updateuser" property="updateuser" jdbcType="VARCHAR" />
+    <result column="updatedate" property="updatedate" jdbcType="TIMESTAMP" />
+    <result column="status_id" property="statusId" jdbcType="BIGINT" />
+    <result column="expirationDate" property="expirationdate" jdbcType="DATE" />
+    <result column="expirationNotice" property="expirationnotice" jdbcType="BIGINT" />
+    <result column="noticeDays" property="noticedays" jdbcType="BIGINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="intro" property="intro" jdbcType="VARCHAR" />
+    <result column="manyuser" property="manyuser" jdbcType="BIGINT" />
+    <result column="documentSn" property="documentsn" jdbcType="VARCHAR" />
+    <result column="comefromDepartment_id" property="comefromdepartmentId" jdbcType="BIGINT" />
+    <result column="comefromUnit_id" property="comefromunitId" jdbcType="BIGINT" />
+    <result column="postMan" property="postman" jdbcType="VARCHAR" />
+    <result column="approvalTime" property="approvaltime" jdbcType="TIMESTAMP" />
+    <result column="identificationTime" property="identificationtime" jdbcType="TIMESTAMP" />
+    <result column="productId" property="productid" jdbcType="VARCHAR" />
+    <result column="materialId" property="materialid" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="BIGINT" />
+    <result column="page" property="page" jdbcType="BIGINT" />
+    <result column="patentNumber" property="patentnumber" jdbcType="VARCHAR" />
+    <result column="inspector" property="inspector" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_archive
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.Archive" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_archive (id, sn, doctypemanage_id, 
+      docpositions_id, title, employee_id, 
+      inputTime, updateuser, updatedate, 
+      status_id, expirationDate, expirationNotice, 
+      noticeDays, content, intro, 
+      manyuser, documentSn, comefromDepartment_id, 
+      comefromUnit_id, postMan, approvalTime, 
+      identificationTime, productId, materialId, 
+      number, page, patentNumber, 
+      inspector, status)
+    values (#{id,jdbcType=BIGINT}, #{sn,jdbcType=VARCHAR}, #{doctypemanageId,jdbcType=BIGINT}, 
+      #{docpositionsId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{employeeId,jdbcType=BIGINT}, 
+      #{inputtime,jdbcType=TIMESTAMP}, #{updateuser,jdbcType=VARCHAR}, #{updatedate,jdbcType=TIMESTAMP}, 
+      #{statusId,jdbcType=BIGINT}, #{expirationdate,jdbcType=DATE}, #{expirationnotice,jdbcType=BIGINT}, 
+      #{noticedays,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{intro,jdbcType=VARCHAR}, 
+      #{manyuser,jdbcType=BIGINT}, #{documentsn,jdbcType=VARCHAR}, #{comefromdepartmentId,jdbcType=BIGINT}, 
+      #{comefromunitId,jdbcType=BIGINT}, #{postman,jdbcType=VARCHAR}, #{approvaltime,jdbcType=TIMESTAMP}, 
+      #{identificationtime,jdbcType=TIMESTAMP}, #{productid,jdbcType=VARCHAR}, #{materialid,jdbcType=VARCHAR}, 
+      #{number,jdbcType=BIGINT}, #{page,jdbcType=BIGINT}, #{patentnumber,jdbcType=VARCHAR}, 
+      #{inspector,jdbcType=VARCHAR}, #{status,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.Archive" >
+    update t_archive
+    set sn = #{sn,jdbcType=VARCHAR},
+      doctypemanage_id = #{doctypemanageId,jdbcType=BIGINT},
+      docpositions_id = #{docpositionsId,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR},
+      employee_id = #{employeeId,jdbcType=BIGINT},
+      inputTime = #{inputtime,jdbcType=TIMESTAMP},
+      updateuser = #{updateuser,jdbcType=VARCHAR},
+      updatedate = #{updatedate,jdbcType=TIMESTAMP},
+      status_id = #{statusId,jdbcType=BIGINT},
+      expirationDate = #{expirationdate,jdbcType=DATE},
+      expirationNotice = #{expirationnotice,jdbcType=BIGINT},
+      noticeDays = #{noticedays,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      intro = #{intro,jdbcType=VARCHAR},
+      manyuser = #{manyuser,jdbcType=BIGINT},
+      documentSn = #{documentsn,jdbcType=VARCHAR},
+      comefromDepartment_id = #{comefromdepartmentId,jdbcType=BIGINT},
+      comefromUnit_id = #{comefromunitId,jdbcType=BIGINT},
+      postMan = #{postman,jdbcType=VARCHAR},
+      approvalTime = #{approvaltime,jdbcType=TIMESTAMP},
+      identificationTime = #{identificationtime,jdbcType=TIMESTAMP},
+      productId = #{productid,jdbcType=VARCHAR},
+      materialId = #{materialid,jdbcType=VARCHAR},
+      number = #{number,jdbcType=BIGINT},
+      page = #{page,jdbcType=BIGINT},
+      patentNumber = #{patentnumber,jdbcType=VARCHAR},
+      inspector = #{inspector,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, sn, doctypemanage_id, docpositions_id, title, employee_id, inputTime, 
+    updateuser, updatedate, status_id, expirationDate, expirationNotice, noticeDays, 
+    content, intro, manyuser, documentSn, comefromDepartment_id, comefromUnit_id, postMan, 
+    approvalTime, identificationTime, productId, materialId, number, page, patentNumber, 
+    inspector, status
+    from t_archive
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, sn, doctypemanage_id, docpositions_id, title, employee_id, inputTime, 
+    updateuser, updatedate, status_id, expirationDate, expirationNotice, noticeDays, 
+    content, intro, manyuser, documentSn, comefromDepartment_id, comefromUnit_id, postMan, 
+    approvalTime, identificationTime, productId, materialId, number, page, patentNumber, 
+    inspector, status
+    from t_archive
+  </select>
+  <!--PageResult<T> queryPage(BaseQuery query);-->
+  <select id="queryPage" parameterType="ArchiveQuery" resultMap="BaseResultMap">
+    select id, sn, doctypemanage_id, docpositions_id, title, employee_id, inputTime,
+    updateuser, updatedate, status_id, expirationDate, expirationNotice, noticeDays,
+    content, intro, manyuser, documentSn, comefromDepartment_id, comefromUnit_id, postMan,
+    approvalTime, identificationTime, productId, materialId, number, page, patentNumber,
+    inspector, status
+    from t_archive
+  </select>
+</mapper>

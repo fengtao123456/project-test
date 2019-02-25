@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/base_core/base_core.iml" filepath="$PROJECT_DIR$/base_core/base_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base_cxf/base_cxf.iml" filepath="$PROJECT_DIR$/base_cxf/base_cxf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base_utils/base_utils.iml" filepath="$PROJECT_DIR$/base_utils/base_utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/base_velocity/base_velocity.iml" filepath="$PROJECT_DIR$/base_velocity/base_velocity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dms.iml" filepath="$PROJECT_DIR$/dms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dms_common/dms_common.iml" filepath="$PROJECT_DIR$/dms_common/dms_common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dms_mapper/dms_mapper.iml" filepath="$PROJECT_DIR$/dms_mapper/dms_mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dms_service/dms_service.iml" filepath="$PROJECT_DIR$/dms_service/dms_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dms_web/dms_web.iml" filepath="$PROJECT_DIR$/dms_web/dms_web.iml" />
+    </modules>
+  </component>
+</project>

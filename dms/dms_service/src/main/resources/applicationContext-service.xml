@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!--service层的扫描-->
+	<context:component-scan base-package="cn.newyork.dms.service"/>
+
+	<import resource="classpath*:applicationContext-mapper.xml"/>
+	<import resource="classpath*:applicationContext-cxf.xml"/>
+	<!--aop的xml配置-->
+	<!--<aop:config>
+		&lt;!&ndash;给所有的I*Servise里面的方法加切点&ndash;&gt;
+		<aop:pointcut id="pointcut" expression="execution(* cn.newyork.*.mapper.*Mapper.*(..))"/>
+		<aop:aspect ref="writelog">
+			&lt;!&ndash;后置通知 执行writelog的end方法&ndash;&gt;
+			<aop:after-returning method="end" pointcut-ref="pointcut"/>
+		</aop:aspect>
+	</aop:config>
+	&lt;!&ndash;找到执行aop操作的类&ndash;&gt;
+	<bean id="writelog" class="cn.newyork.dms.log.WriteLog"/>-->
+</beans>

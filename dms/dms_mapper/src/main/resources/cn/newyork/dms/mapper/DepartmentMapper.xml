@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.DepartmentMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.Department" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+
+   <result column="descs" property="descs" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+    <!--<result column="parent_id" property="parent" jdbcType="BIGINT" />-->
+    <association property="parent"
+                 javaType="cn.newyork.common.domain.Department"
+                 column="parent_id"
+                 select="findFather">
+    </association>
+      <!--<result column="employee_id" property="employee" jdbcType="BIGINT" />-->
+      <association property="employee"
+                   javaType="cn.newyork.common.domain.Employee"
+                   column="employee_id"
+                   select="findEmployeer">
+      </association>
+
+  </resultMap>
+
+    <select id="findEmployeer" resultType="cn.newyork.common.domain.Employee"
+            parameterType="long" >
+    select id, username, password, realname, identcard, inputdate, phone, educdetail_id,
+    address, sexdetail_id, birthday, descs, status, department_id
+    from t_employee
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="findFather" parameterType="long" resultType="cn.newyork.common.domain.Department">
+        select id, sn, name, phone, fax, url, parent_id, employee_id, descs, status
+    from t_department
+    where id = #{parentId}
+    </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_department
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.Department" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_department (id, sn, name, 
+      phone, fax, url, parent_id, 
+      employee_id, descs, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{sn,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{parent.id,jdbcType=BIGINT},
+      #{employee.id,jdbcType=BIGINT}, #{descs,jdbcType=VARCHAR}, #{status,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.Department" >
+    update t_department
+    set sn = #{sn,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      parent_id = #{parent.id,jdbcType=BIGINT},
+      employee_id = #{employee.id,jdbcType=BIGINT},
+      descs = #{descs,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, sn, name, phone, fax, url, parent_id, employee_id, descs, status
+    from t_department
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, sn, name, phone, fax, url, parent_id, employee_id, descs, status
+    from t_department
+  </select>
+
+  <!--queryPage-->
+  <select id="queryPage" resultMap="BaseResultMap" >
+    select id, sn, name, phone, fax, url, parent_id, employee_id, descs, status
+    from t_department
+  </select>
+
+
+  <!--findAllChild();-->
+  <select id="findAllChild" resultMap="BaseResultMap" >
+    select id, sn, name, phone, fax, url, parent_id, employee_id, descs, status
+    from t_department where parent_id is not null
+  </select>
+
+  <!--findChildByID();-->
+  <select id="findChildByID" resultMap="BaseResultMap" parameterType="long">
+    select id, sn, name, phone, fax, url, parent_id, employee_id, descs, status
+    from t_department where parent_id =#{id}
+  </select>
+<!--selectParent-->
+  <select id="selectParent" resultMap="BaseResultMap">
+    select id, sn, name, phone, fax, url, parent_id, employee_id, descs, status
+    from t_department where parent_id is null
+  </select>
+
+  <!--selectParentByID-->
+  <!--<select id="selectParentByID" resultMap="BaseResultMap" parameterType="long">
+    select id, sn, name, phone, fax, url, parent_id, employee_id, descs, status
+    from t_department where id =#{parent_id}
+  </select>-->
+
+  <!--高级查询：模糊查询【资源名称与资源路径】
+  List<Sysresource> likeQuery(SysresourceQuery query);-->
+ <!-- <select id="likeQuery" parameterType="cn.newyork.common.query.DepartmentQuery" resultType="BaseResultMap">
+  select * from t_department td
+  <where>
+    <if test="name !=null and name!=''">
+      and td.name like CONCAT('%',#{name},'%')
+    </if>
+    <if test="desc !=null and desc!=''">
+      and td.desc like concat('%',#{desc},'%')
+    </if>
+  </where>
+  </select>-->
+</mapper>

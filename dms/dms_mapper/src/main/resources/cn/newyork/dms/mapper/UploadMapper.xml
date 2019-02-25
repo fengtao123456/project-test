@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.UploadMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.Upload" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="attachment" property="attachment" jdbcType="VARCHAR" />
+    <result column="attachmenttypes_id" property="attachmenttypesId" jdbcType="BIGINT" />
+    <result column="attachmentUrl" property="attachmenturl" jdbcType="VARCHAR" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="archives_id" property="archivesId" jdbcType="BIGINT" />
+    <result column="uploadTime" property="uploadtime" jdbcType="TIMESTAMP" />
+    <result column="fileSize" property="filesize" jdbcType="BIGINT" />
+    <result column="uploadEmployee_id" property="uploademployeeId" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_upload
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.Upload" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_upload (id, attachment, attachmenttypes_id, 
+      attachmentUrl, sn, archives_id, 
+      uploadTime, fileSize, uploadEmployee_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{attachment,jdbcType=VARCHAR}, #{attachmenttypesId,jdbcType=BIGINT}, 
+      #{attachmenturl,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, #{archivesId,jdbcType=BIGINT}, 
+      #{uploadtime,jdbcType=TIMESTAMP}, #{filesize,jdbcType=BIGINT}, #{uploademployeeId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.Upload" >
+    update t_upload
+    set attachment = #{attachment,jdbcType=VARCHAR},
+      attachmenttypes_id = #{attachmenttypesId,jdbcType=BIGINT},
+      attachmentUrl = #{attachmenturl,jdbcType=VARCHAR},
+      sn = #{sn,jdbcType=VARCHAR},
+      archives_id = #{archivesId,jdbcType=BIGINT},
+      uploadTime = #{uploadtime,jdbcType=TIMESTAMP},
+      fileSize = #{filesize,jdbcType=BIGINT},
+      uploadEmployee_id = #{uploademployeeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, attachment, attachmenttypes_id, attachmentUrl, sn, archives_id, uploadTime, 
+    fileSize, uploadEmployee_id
+    from t_upload
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, attachment, attachmenttypes_id, attachmentUrl, sn, archives_id, uploadTime, 
+    fileSize, uploadEmployee_id
+    from t_upload
+  </select>
+  <!--分页查询-->
+  <!--List<T> queryPage(BaseQuery baseQuery);-->
+  <select id="queryPage" resultMap="BaseResultMap">
+    select id, attachment, attachmenttypes_id, attachmentUrl, sn, archives_id, uploadTime,
+    fileSize, uploadEmployee_id
+    from t_upload
+  </select>
+</mapper>

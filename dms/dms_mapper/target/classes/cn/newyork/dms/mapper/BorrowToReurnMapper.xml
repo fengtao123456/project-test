@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.BorrowToReurnMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.BorrowToReurn" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="archive_id" property="archiveId" jdbcType="BIGINT" />
+    <result column="borrow_id" property="borrowId" jdbcType="BIGINT" />
+    <result column="return_id" property="returnId" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_borrowtoreturn
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.BorrowToReurn" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_borrowtoreturn (id, archive_id, borrow_id, 
+      return_id)
+    values (#{id,jdbcType=BIGINT}, #{archiveId,jdbcType=BIGINT}, #{borrowId,jdbcType=BIGINT}, 
+      #{returnId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.BorrowToReurn" >
+    update t_borrowtoreturn
+    set archive_id = #{archiveId,jdbcType=BIGINT},
+      borrow_id = #{borrowId,jdbcType=BIGINT},
+      return_id = #{returnId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, archive_id, borrow_id, return_id
+    from t_borrowtoreturn
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, archive_id, borrow_id, return_id
+    from t_borrowtoreturn
+  </select>
+</mapper>

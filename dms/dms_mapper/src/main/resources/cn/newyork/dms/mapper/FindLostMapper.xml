@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.FindLostMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.FindLost" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="finddate" property="finddate" jdbcType="TIMESTAMP" />
+    <result column="descs" property="descs" jdbcType="VARCHAR" />
+    <association property="archive"
+                 column="archive_id"
+                 javaType="cn.newyork.common.domain.Archive"
+                 select="findArchiveById">
+    </association>
+    <association property="employee"
+                 column="employee_id"
+                 javaType="cn.newyork.common.domain.Employee"
+                 select="findEmployeeById">
+    </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_findlost
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.FindLost" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_findlost (id, archive_id, employee_id, 
+      finddate, descs)
+    values (#{id,jdbcType=BIGINT}, #{archive.id,jdbcType=BIGINT}, #{employee.id,jdbcType=BIGINT},
+      #{finddate,jdbcType=TIMESTAMP}, #{descs,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.FindLost" >
+    update t_findlost
+    set archive_id = #{archive.id,jdbcType=BIGINT},
+      employee_id = #{employee.id,jdbcType=BIGINT},
+      finddate = #{finddate,jdbcType=TIMESTAMP},
+      descs = #{descs,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, archive_id, employee_id, finddate, descs
+    from t_findlost
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, archive_id, employee_id, finddate, descs
+    from t_findlost
+  </select>
+  <select id="queryPage" resultMap="BaseResultMap" >
+    select id, archive_id, employee_id, finddate, descs
+    from t_findlost
+  </select>
+
+  <select id="findArchiveById" parameterType="long" resultType="cn.newyork.common.domain.Archive">
+    select * from t_archive where id=#{id}
+  </select>
+  <select id="findEmployeeById" parameterType="long" resultType="cn.newyork.common.domain.Employee">
+    select * from t_employee where id=#{id}
+  </select>
+</mapper>

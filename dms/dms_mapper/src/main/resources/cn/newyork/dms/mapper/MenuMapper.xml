@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.MenuMapper">
+    <resultMap id="BaseResultMap" type="cn.newyork.common.domain.Menu">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="icon_url" property="iconUrl" jdbcType="VARCHAR"/>
+        <result column="descs" property="descs" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="BIGINT"/>
+        <association property="parent"
+                     javaType="cn.newyork.common.domain.Menu"
+                     column="parent_id"
+                     select="findFather">
+        </association>
+        <association property="sysresource"
+                     javaType="cn.newyork.common.domain.Sysresource"
+                     column="sysresource_id"
+                     select="findSysresource">
+        </association>
+    </resultMap>
+    <select id="findFather" parameterType="long" resultType="cn.newyork.common.domain.Menu">
+        select id, name,sysresource_id, icon_url, descs, status
+         from t_menu
+         where id =#{parentId}
+    </select>
+    <select id="findSysresource" parameterType="long" resultType="cn.newyork.common.domain.Sysresource">
+         select id, name, url, descs, status
+          from t_sysresource
+          where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_menu
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="cn.newyork.common.domain.Menu">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_menu (id, name, parent_id,
+        sysresource_id, icon_url, descs,
+        status)
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT},
+        #{sysresourceId,jdbcType=VARCHAR}, #{iconUrl,jdbcType=VARCHAR}, #{descs,jdbcType=VARCHAR},
+        #{status,jdbcType=BIGINT})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.Menu">
+    update t_menu
+    set name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      sysresource_id = #{sysresourceId,jdbcType=VARCHAR},
+      icon_url = #{iconUrl,jdbcType=VARCHAR},
+      descs = #{descs,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select id, name, parent_id, sysresource_id, icon_url, descs, status
+    from t_menu
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, parent_id, sysresource_id, icon_url, descs, status
+    from t_menu
+  </select>
+    <!--queryPage-->
+    <select id="queryPage" resultMap="BaseResultMap">
+    select id, name, parent_id, sysresource_id, icon_url, descs, status
+    from t_menu
+  </select>
+    <!--List<Menu> findAllChild();-->
+    <select id="findAllChild" parameterType="long" resultMap="BaseResultMap">
+    select id, name, parent_id, sysresource_id, icon_url, descs, status
+    from t_menu where parent_id is not null
+  </select>
+
+    <select id="findParent" parameterType="long" resultMap="BaseResultMap">
+    select *
+    from t_menu where parent_id is null
+  </select>
+    <!--根据用户ID查询所有的子菜单-->
+    <!--List<Menu> findManuByLoginUser(Long employeeId);-->
+    <select id="findManuByLoginUser" parameterType="long" resultMap="BaseResultMap">
+        select * from employee_role er left
+        join role_menu rm on er.role_id=rm.role_id left join t_menu m on
+        rm.menu_id=m.id  WHERE er.employee_id=#{id}
+    </select>
+</mapper>

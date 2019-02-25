@@ -1,0 +1,5 @@
+cn\newyork\base\utils\AjaxResult.class
+cn\newyork\base\utils\PageResult.class
+cn\newyork\base\utils\EasyuiColumn.class
+cn\newyork\base\utils\LuceneUtil.class
+cn\newyork\base\utils\FieldVo.class

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.RoleMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.Role" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="descs" property="descs" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_role
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.Role" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_role (id, sn, name, 
+      descs, status)
+    values (#{id,jdbcType=BIGINT}, #{sn,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{descs,jdbcType=VARCHAR}, #{status,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.Role" >
+    update t_role
+    set sn = #{sn,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      descs = #{descs,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, sn, name, descs, status
+    from t_role
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, sn, name, descs, status
+    from t_role
+  </select>
+  <select id="queryPage" resultMap="BaseResultMap" >
+    select id, sn, name, descs, status
+    from t_role
+  </select>
+  <!--模糊查询-->
+  <!--List<Role> likeQuery(RoleQuery roleQuery);-->
+  <select id="likeQuery" parameterType="cn.newyork.common.query.RoleQuery" resultType="cn.newyork.common.domain.Role">
+    select * from t_role r
+    <where>
+      <if test="name !=null and name!=''">
+        and r.name like CONCAT('%',#{name},'%')
+      </if>
+    </where>
+  </select>
+</mapper>

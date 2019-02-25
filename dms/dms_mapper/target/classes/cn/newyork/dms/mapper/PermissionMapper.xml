@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.newyork.dms.mapper.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="cn.newyork.common.domain.Permission" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="descs" property="descs" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+    <!--<result column="sysresource_id" property="sysresourceId" jdbcType="BIGINT" />-->
+      <association property="sysresource"
+                   javaType="cn.newyork.common.domain.Sysresource"
+                   column="sysresource_id"
+                   select="findSysResource">
+      </association>
+  </resultMap>
+
+  <select id="findSysResource" resultType="cn.newyork.common.domain.Sysresource"  >
+    select id, name, url, descs, status
+    from t_sysresource
+    where id = #{sysresource_id}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_permission
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.newyork.common.domain.Permission" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_permission (id, sn, name, 
+      sysresource_id, descs, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{sn,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sysresource.id,jdbcType=BIGINT}, #{descs,jdbcType=VARCHAR}, #{status,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.newyork.common.domain.Permission" >
+    update t_permission
+    set sn = #{sn,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sysresource_id = #{sysresourceId,jdbcType=BIGINT},
+      descs = #{descs,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, sn, name, sysresource_id, descs, status
+    from t_permission
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, sn, name, sysresource_id, descs, status
+    from t_permission
+  </select>
+
+  <select id="queryPage" resultMap="BaseResultMap" >
+    select id, sn, name, sysresource_id, descs, status
+    from t_permission
+  </select>
+  <!--模糊查询-->
+  <!--List<Permission> likeQuery(PermissionQuery roleQuery);-->
+  <select id="likeQuery" parameterType="cn.newyork.common.query.PermissionQuery" resultType="cn.newyork.common.domain.Permission">
+    select * from t_permission p
+    <where>
+      <if test="name !=null and name!=''">
+        and p.name like CONCAT('%',#{name},'%')
+      </if>
+      <if test="status!=null and status!=''">
+        and p.status =#{status}
+      </if>
+    </where>
+  </select>
+  <!--根据用户id查询权限-->
+  <!--Set<String> findSnByEmp(Long employeeId);-->
+  <!-- 给一个用户 id，查看该用户下的权限sn（用户-角色-权限） -->
+  <select id="findSnByEmp" resultType="string" parameterType="long">
+          select p.sn psn from employee_role er left
+        join role_permission rp on er.role_id=rp.role_id left join t_permission p on
+        rp.permission_id=p.id  WHERE er.employee_id=#{id}
+    </select>
+</mapper>

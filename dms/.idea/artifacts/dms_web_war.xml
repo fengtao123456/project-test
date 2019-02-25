@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="dms_web:war">
+    <output-path>$PROJECT_DIR$/dms_web/target</output-path>
+    <root id="archive" name="dms_web.war">
+      <element id="artifact" artifact-name="dms_web:war exploded" />
+    </root>
+  </artifact>
+</component>

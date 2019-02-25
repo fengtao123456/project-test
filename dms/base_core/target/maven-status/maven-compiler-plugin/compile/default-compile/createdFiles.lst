@@ -1,0 +1,4 @@
+cn\newyork\core\mapper\BaseMapper.class
+cn\newyork\core\query\BaseQuery.class
+cn\newyork\core\service\impl\BaseServiceImpl.class
+cn\newyork\core\service\IBaseService.class
